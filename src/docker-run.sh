@@ -8,4 +8,4 @@ $CERTBOT_ARGS \
 -a certbot-dns-vultr:dns-vultr  \
 --certbot-dns-vultr:dns-vultr-credentials /opt/certbot/credentials.ini \
 --agree-tos --manual-public-ip-logging-ok \
--d "*.$DOMAIN" -m $EMAIL
+-d $DOMAIN -d "*.$DOMAIN" -m $EMAIL
