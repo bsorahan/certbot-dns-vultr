@@ -17,11 +17,11 @@ apt-get -y install python-pip python-setuptools python-wheel
 ```
 
 ## Usage
-To obtain HTTPS certificates run:
+To obtain a HTTPS certificates for a list of domains run:
 ```sh
 VULTR_API_KEY="YOUR KEY"
 CREDENTIALS_FILE=$HOME/vultr_credentials.ini
-DOMAINS=example.com,abc.example.com,www.example.com
+DOMAINS=example.com,abc.example.com,www.example.com,*.dev.example.com
 EMAIL=ben@example.com
 echo "certbot_dns_vultr:dns_vultr_token = $VULTR_API_KEY" > $CREDENTIALS_FILE
 chmod 600 $CREDENTIALS_FILE
