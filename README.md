@@ -31,7 +31,7 @@ certbot certonly --domains $DOMAINS --email $EMAIL \
 ```
 Set `VULTR_API_KEY`, `CREDENTIALS_FILE`, `DOMAINS` and `EMAIL` as required for your environment.
 
-`VULTR_API_KEY` - Your API key can be retrieved from your Vultr account: https://my.vultr.com/settings/#settingsapi
+Your `VULTR_API_KEY` can be retrieved from your Vultr account: https://my.vultr.com/settings/#settingsapi.
 
 ### Advanced Usage 
 Refer to certbot documentation for usage of certbot https://certbot.eff.org/docs/using.html. As certbot-dns-vultr is a plugin for certbot the documentation describes other common usage such as combining with other plugins to automate certificate installation and renewal.
