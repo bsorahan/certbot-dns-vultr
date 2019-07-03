@@ -22,7 +22,8 @@ class Authenticator(dns_common.DNSAuthenticator):
     This Authenticator uses the Vultr v2 API to fulfill a dns-01 challenge.
     """
 
-    description = "Obtain certificates using a DNS TXT record (if you are using Vultr for DNS)."
+    description = ('Obtain certificates using a DNS TXT record '
+        '(if you are using Vultr for DNS).')
     ttl = 60
 
     def __init__(self, *args, **kwargs):
@@ -31,19 +32,21 @@ class Authenticator(dns_common.DNSAuthenticator):
 
     @classmethod
     def add_parser_arguments(cls, add):  # pylint: disable=arguments-differ
-        super(Authenticator, cls).add_parser_arguments(add, default_propagation_seconds=30)
+        super(Authenticator, cls).add_parser_arguments(add, 
+            default_propagation_seconds=30)
         add('credentials', help='Vultr credentials INI file.')
 
     def more_info(self):  # pylint: disable=missing-docstring,no-self-use
-        return 'This plugin configures a DNS TXT record to respond to a dns-01 challenge using ' + \
-               'the Vultr API.'
+        return ('This plugin configures a DNS TXT record to respond to '
+            'a dns-01 challenge using the Vultr API.')
 
     def _setup_credentials(self):
         self.credentials = self._configure_credentials(
             'credentials',
             'Vultr credentials INI file',
             {
-                'token': 'User access token for Vultr v2 API. (See {0}.)'.format(ACCOUNT_URL)
+                'token': 'User access token for Vultr v2 API. '
+                '(See {0}.)'.format(ACCOUNT_URL)
             }
         )
 
@@ -71,9 +74,7 @@ class _VultrLexiconClient(dns_common_lexicon.LexiconClient):
         })
 
     def _handle_http_error(self, e, domain_name):
-        hint = None
-        if str(e).startswith('401 Client Error: Unauthorized for url:'):
-            hint = 'Is your API token value correct?'
 
-        return errors.PluginError('Error determining zone identifier for {0}: {1}.{2}'
-                                  .format(domain_name, e, ' ({0})'.format(hint) if hint else ''))
+        return errors.PluginError(('HTTP error '
+            'for {0}: {1}. (Is your API token value correct?)')
+            .format(domain_name, e))

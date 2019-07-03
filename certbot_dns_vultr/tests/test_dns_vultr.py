@@ -10,6 +10,8 @@ from certbot.plugins import dns_test_common
 from certbot.plugins import dns_test_common_lexicon
 from certbot.tests import util as test_util
 
+from certbot_dns_vultr.dns_vultr import Authenticator
+
 TOKEN = 'foo'
 
 
@@ -18,8 +20,6 @@ class AuthenticatorTest(test_util.TempDirTestCase,
 
     def setUp(self):
         super(AuthenticatorTest, self).setUp()
-
-        from certbot_dns_vultr.dns_vultr import Authenticator
 
         path = os.path.join(self.tempdir, 'file.ini')
         dns_test_common.write({"vultr_token": TOKEN}, path)
