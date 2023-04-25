@@ -23,7 +23,7 @@ setup(
     install_requires = [
         'acme>=0.21.1',
         'certbot>=0.21.1',
-        'dns-lexicon>=2.2.1', # Support for >1 TXT record per name
+        'dns-lexicon>=3.6.0', # Support for >1 TXT record per name
         'mock',
         'setuptools',
         'zope.interface',

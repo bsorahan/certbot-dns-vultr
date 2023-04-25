@@ -1,5 +1,6 @@
 """DNS Authenticator for Vultr DNS."""
 import logging
+from typing import Optional
 
 import zope.interface
 from lexicon.providers import vultr
@@ -13,6 +14,31 @@ logger = logging.getLogger(__name__)
 
 ACCOUNT_URL = 'https://my.vultr.com/settings/#settingsapi'
 
+
+class _VultrLexiconClient(dns_common_lexicon.LexiconClient):
+    """
+    Encapsulates all communication with the Vultr via Lexicon.
+    """
+
+    def __init__(self, token, ttl):
+        super(_VultrLexiconClient, self).__init__()
+
+        self.provider = vultr.Provider({
+            'auth_token': token,
+            'ttl': ttl,
+        })
+
+    def _handle_http_error(self, e, domain_name):
+
+        return errors.PluginError(('HTTP error '
+            'for {0}: {1}. (Is your API token value correct?)')
+            .format(domain_name, e))
+    
+    def _handle_general_error(self, e: Exception, domain_name: str) -> Optional[errors.PluginError]:
+        if not str(e).startswith('Domain not found'):
+            return errors.PluginError('Unexpected error determining zone identifier for {0}: {1}'
+                                      .format(domain_name, e))
+        return None
 
 @zope.interface.implementer(interfaces.IAuthenticator)
 @zope.interface.provider(interfaces.IPluginFactory)
@@ -56,25 +82,6 @@ class Authenticator(dns_common.DNSAuthenticator):
     def _cleanup(self, domain, validation_name, validation):
         self._get_vultr_client().del_txt_record(domain, validation_name, validation)
 
-    def _get_vultr_client(self):
+    def _get_vultr_client(self) -> _VultrLexiconClient:
         return _VultrLexiconClient(self.credentials.conf('token'), self.ttl)
 
-
-class _VultrLexiconClient(dns_common_lexicon.LexiconClient):
-    """
-    Encapsulates all communication with the Vultr via Lexicon.
-    """
-
-    def __init__(self, token, ttl):
-        super(_VultrLexiconClient, self).__init__()
-
-        self.provider = vultr.Provider({
-            'auth_token': token,
-            'ttl': ttl,
-        })
-
-    def _handle_http_error(self, e, domain_name):
-
-        return errors.PluginError(('HTTP error '
-            'for {0}: {1}. (Is your API token value correct?)')
-            .format(domain_name, e))
