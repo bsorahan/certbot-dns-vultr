@@ -1,7 +1,8 @@
 FROM certbot/certbot
 
-COPY src src/certbot-dns-vultr
+RUN mkdir -p /certbot-dns-vultr
+COPY setup.py /certbot-dns-vultr
+COPY certbot_dns_vultr /certbot-dns-vultr/certbot_dns_vultr
 
-RUN pip install --no-cache-dir --editable src/certbot-dns-vultr
-
-ENTRYPOINT ./src/certbot-dns-vultr/docker-run.sh 
+WORKDIR /certbot-dns-vultr
+RUN pip install .
